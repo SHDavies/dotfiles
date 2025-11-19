@@ -1,0 +1,27 @@
+-- You can add your own plugins here or in other files in this directory!
+--  I promise not to create any merge conflicts in this directory :)
+--
+-- See the kickstart.nvim README for more information
+--
+-- CUSTOM CONFIGURATION FILES:
+--  - ../keymaps.lua       - Custom keymaps (non-plugin specific)
+--
+-- All main plugins have been moved to separate files in this directory:
+--  - blink-cmp.lua     - Autocompletion
+--  - conform.lua       - Formatting
+--  - gitsigns.lua      - Git integration
+--  - lazydev.lua       - Lua LSP for Neovim config
+--  - lspconfig.lua     - LSP configuration
+--  - mini.lua          - Collection of small plugins
+--  - telescope.lua     - Fuzzy finder
+--  - todo-comments.lua - Highlight TODO comments
+--  - tokyonight.lua    - Colorscheme
+--  - treesitter.lua    - Syntax highlighting
+--  - which-key.lua     - Keybinding helper
+--
+-- Note: guess-indent.nvim is in init.lua since it's just a simple string spec
+--
+-- To add more plugins, create additional .lua files in this directory.
+-- Each file should return a plugin specification table.
+
+return {}
