@@ -105,10 +105,10 @@ vim.o.number = true
 -- vim.o.relativenumber = true
 
 -- Set tab size to 2 spaces
-vim.o.tabstop = 2        -- Number of spaces a <Tab> in the file counts for
-vim.o.shiftwidth = 2     -- Number of spaces to use for each step of (auto)indent
-vim.o.expandtab = true   -- Use spaces instead of tabs
-vim.o.softtabstop = 2    -- Number of spaces that a <Tab> counts for while editing
+vim.o.tabstop = 2 -- Number of spaces a <Tab> in the file counts for
+vim.o.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
+vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.softtabstop = 2 -- Number of spaces that a <Tab> counts for while editing
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -146,6 +146,8 @@ vim.o.timeoutlen = 300
 -- Configure how new splits should be opened
 vim.o.splitright = true
 vim.o.splitbelow = true
+
+vim.o.cmdheight = 0
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
