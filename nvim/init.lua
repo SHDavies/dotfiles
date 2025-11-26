@@ -176,6 +176,8 @@ vim.o.confirm = true
 -- Custom keymaps are defined in lua/custom/keymaps.lua
 require 'custom.keymaps'
 
+require 'custom.autocmds'
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
