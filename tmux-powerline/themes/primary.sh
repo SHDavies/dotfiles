@@ -15,8 +15,8 @@ else
 fi
 
 # See Color formatting section below for details on what colors can be used here.
-TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR="#202328"
-TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR="#BBC2CF"
+TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR="#343f44"
+TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR="#9da9a0"
 # shellcheck disable=SC2034
 TMUX_POWERLINE_SEG_AIR_COLOR=$(tp_air_color)
 
@@ -30,13 +30,13 @@ TMUX_POWERLINE_DEFAULT_RIGHTSIDE_SEPARATOR=${TMUX_POWERLINE_DEFAULT_RIGHTSIDE_SE
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_CURRENT" ]; then
 	TMUX_POWERLINE_WINDOW_STATUS_CURRENT=(
 		# "#[$(tp_format inverse)]"
-		"#[bg=#EC5F67,fg=#202328,bold]"
+		"#[bg=#a7c080,fg=#343f44,bold]"
 		"$TMUX_POWERLINE_DEFAULT_LEFTSIDE_SEPARATOR"
-		" #I"
+		" #I "
 		"$TMUX_POWERLINE_SEPARATOR_RIGHT_THIN"
 		" #W "
 		# "#[$(tp_format regular)]"
-		"#[bg=#202328,fg=#ec5f67]"
+		"#[bg=#343f44,fg=#a7c080]"
 		"$TMUX_POWERLINE_DEFAULT_LEFTSIDE_SEPARATOR"
 	)
 fi
@@ -52,7 +52,7 @@ fi
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_FORMAT" ]; then
 	TMUX_POWERLINE_WINDOW_STATUS_FORMAT=(
 		"#[$(tp_format regular)]"
-		"  #I#{?window_flags,#F, }"
+		"  #I#{?window_flags,#F, } "
 		"$TMUX_POWERLINE_SEPARATOR_RIGHT_THIN"
 		" #W "
 	)
