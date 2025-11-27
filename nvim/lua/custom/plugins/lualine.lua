@@ -228,6 +228,12 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   -- opts = config,
   opts = {
+    options = {
+      disabled_filetypes = {
+        statusline = { 'neo-tree' },
+      },
+      ignore_focus = { 'neo-tree' },
+    },
     sections = {
       lualine_a = { 'mode' },
       lualine_b = { 'branch', 'diff' },
@@ -245,5 +251,6 @@ return {
       lualine_z = {},
     },
     theme = 'everforest',
+    -- extensions = { 'neo-tree' },
   },
 }
