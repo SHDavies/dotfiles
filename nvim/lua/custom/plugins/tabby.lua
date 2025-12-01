@@ -1,66 +1,89 @@
+local theme = {
+  fill = 'TabLineFill',
+  head = 'TabLine',
+  current_tab = 'TabLineSel',
+  tab = 'TabLine',
+  win = 'TabLine',
+  tail = 'TabLine',
+}
+
 return {
   'nanozuki/tabby.nvim',
   event = 'VimEnter',
   dependencies = {
     'nvim-tree/nvim-web-devicons', -- For file icons
   },
-  config = function()
-    local theme = {
-      fill = 'TabLineFill',
-      head = 'TabLine',
-      current_tab = 'TabLineSel',
-      tab = 'TabLine',
-      win = 'TabLine',
-      tail = 'TabLine',
-    }
+  opts = {
+    preset = 'active_wins_at_tail',
+    option = {
+      theme = theme,
+      nerdfont = true,
+      lualine_theme = 'everforest',
+      tab_name = {
+        name_fallback = function(tabid)
+          -- tabid is the tab handle, convert to tab number
+          local tab_number = vim.api.nvim_tabpage_get_number(tabid)
 
-    require('tabby.tabline').set(function(line)
-      return {
-        -- Left side: Tab labels
-        {
-          { '  ', hl = theme.head },
-        },
-        line.tabs().foreach(function(tab)
-          local hl = tab.is_current() and theme.current_tab or theme.tab
+          -- Get the working directory for this tab
+          local cwd = vim.fn.getcwd(-1, tab_number)
 
-          -- Get project name from tab's working directory
-          local cwd = vim.fn.getcwd(-1, tab.number())
-          local project_name = vim.fn.fnamemodify(cwd, ':t')
-
-          return {
-            line.sep(' ', hl, theme.fill),
-            tab.is_current() and '' or '',
-            ' ',
-            tab.number(),
-            ' ',
-            project_name,
-            line.sep('', hl, theme.fill),
-            hl = hl,
-            margin = ' ',
-          }
-        end),
-
-        -- Spacer between tabs and buffers
-        line.spacer(),
-
-        -- Right side: Buffers in active tab
-        line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
-          local hl = win.is_current() and theme.current_tab or theme.win
-          return {
-            line.sep(' ', hl, theme.fill),
-            win.buf_name(),
-            hl = hl,
-          }
-        end),
-
-        {
-          line.sep('', theme.tail, theme.fill),
-          { '  ', hl = theme.tail },
-        },
-        hl = theme.fill,
-      }
-    end)
-  end,
+          -- Return just the project name (basename of path)
+          return vim.fn.fnamemodify(cwd, ':t')
+        end,
+      },
+      buf_name = {
+        mode = 'unique',
+      },
+    },
+  },
+  -- config = function()
+  --   require('tabby.tabline').set(function(line)
+  --     return {
+  --       -- Left side: Tab labels
+  --       {
+  --         { '  ', hl = theme.head },
+  --       },
+  --       line.tabs().foreach(function(tab)
+  --         local hl = tab.is_current() and theme.current_tab or theme.tab
+  --
+  --         -- Get project name from tab's working directory
+  --         local cwd = vim.fn.getcwd(-1, tab.number())
+  --         local project_name = vim.fn.fnamemodify(cwd, ':t')
+  --
+  --         return {
+  --           line.sep(' ', hl, theme.fill),
+  --           tab.is_current() and '' or '',
+  --           ' ',
+  --           tab.number(),
+  --           ' ',
+  --           project_name,
+  --           line.sep('', hl, theme.fill),
+  --           hl = hl,
+  --           margin = ' ',
+  --         }
+  --       end),
+  --
+  --       -- Spacer between tabs and buffers
+  --       line.spacer(),
+  --
+  --       -- Right side: Buffers in active tab
+  --       line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
+  --         local hl = win.is_current() and theme.current_tab or theme.win
+  --         return {
+  --           line.sep(' ', hl, theme.fill),
+  --           win.buf_name(),
+  --           hl = hl,
+  --         }
+  --       end),
+  --
+  --       {
+  --         line.sep('', theme.tail, theme.fill),
+  --         { '  ', hl = theme.tail },
+  --       },
+  --       hl = theme.fill,
+  --     }
+  --   end)
+  -- end,
   keys = {
     -- Tab navigation (similar to your barbar bindings)
     { '<A-,>', '<cmd>tabprevious<cr>', desc = 'Previous Tab' },
@@ -86,11 +109,16 @@ return {
     { '<A-c>', '<cmd>tabclose<cr>', desc = 'Close Tab' },
 
     -- Buffer picker in current tab (repurpose Ctrl+P)
-    { '<C-p>', function() Snacks.picker.buffers() end, desc = 'Pick Buffer' },
+    {
+      '<C-p>',
+      function()
+        Snacks.picker.buffers()
+      end,
+      desc = 'Pick Buffer',
+    },
 
     -- Additional useful tab commands
     { '<leader>tn', '<cmd>tabnew<cr>', desc = '[T]ab [N]ew' },
     { '<leader>to', '<cmd>tabonly<cr>', desc = '[T]ab [O]nly (close others)' },
   },
 }
-

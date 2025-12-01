@@ -34,7 +34,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- Note: In most terminals, Ctrl+/ is sent as Ctrl+_
 -- Requires mini.comment to be set up (see lua/custom/plugins/mini.lua)
 vim.keymap.set('n', '<C-_>', 'gcc', { remap = true, desc = 'Toggle comment' })
+vim.keymap.set('n', '<C-/>', 'gcc', { remap = true, desc = 'Toggle comment' })
 vim.keymap.set('v', '<C-_>', 'gc', { remap = true, desc = 'Toggle comment' })
+vim.keymap.set('v', '<C-/>', 'gc', { remap = true, desc = 'Toggle comment' })
 
 -- Indent/outdent in visual mode (Tab/Shift-Tab)
 -- After indenting, reselect the visual selection to allow repeated indenting
