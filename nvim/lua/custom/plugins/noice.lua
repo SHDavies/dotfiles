@@ -10,6 +10,14 @@ return {
         },
         opts = { skip = true },
       },
+      {
+        filter = {
+          any = {
+            { find = 'Committed' },
+          },
+        },
+        opts = { skip = true },
+      },
     },
   },
   dependencies = {
