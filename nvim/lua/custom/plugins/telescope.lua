@@ -1,5 +1,20 @@
 -- Fuzzy Finder (files, lsp, etc)
 -- See `:help telescope` and `:help telescope.setup()`
+local use_window_picker = function(prompt_bufnr)
+  -- Use nvim-window-picker to choose the window by dynamically attaching a function
+  local action_set = require 'telescope.actions.set'
+  local action_state = require 'telescope.actions.state'
+
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  picker.get_selection_window = function()
+    local picked_window_id = require('window-picker').pick_window() or vim.api.nvim_get_current_win()
+    -- Unbind after using so next instance of the picker acts normally
+    picker.get_selection_window = nil
+    return picked_window_id
+  end
+
+  return action_set.edit(prompt_bufnr, 'edit')
+end
 
 return {
   'nvim-telescope/telescope.nvim',
@@ -47,6 +62,16 @@ return {
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
     require('telescope').setup {
+      defaults = {
+        mappings = {
+          i = {
+            ['<C-w>'] = use_window_picker,
+          },
+          n = {
+            ['<C-w>'] = use_window_picker,
+          },
+        },
+      },
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
       --

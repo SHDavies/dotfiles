@@ -24,6 +24,8 @@ vim.o.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.o.expandtab = true -- Use spaces instead of tabs
 vim.o.softtabstop = 2 -- Number of spaces that a <Tab> counts for while editing
 
+vim.o.wrap = false
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
