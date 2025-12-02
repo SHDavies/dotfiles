@@ -72,3 +72,12 @@ vim.keymap.set('i', '|', '|<C-g>u')
 vim.keymap.set('i', ')', ')<C-g>u')
 vim.keymap.set('i', ']', ']<C-g>u')
 vim.keymap.set('i', '}', '}<C-g>u')
+
+vim.keymap.set('i', '<C-z>', '<C-o>u')
+
+function _G.CopyBufferName()
+  local filepath = vim.fn.expand '%'
+  vim.fn.setreg('+', '"' .. filepath .. '"')
+end
+
+vim.keymap.set('n', '<leader>cp', CopyBufferName, { desc = 'Copy current path' })
