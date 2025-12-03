@@ -14,6 +14,7 @@ return {
         filter = {
           any = {
             { find = 'Committed' },
+            { find = 'Config Change' },
           },
         },
         opts = { skip = true },
