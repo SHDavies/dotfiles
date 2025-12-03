@@ -1,6 +1,8 @@
 -- Custom keymaps
 -- See `:help vim.keymap.set()`
 
+vim.keymap.set('n', '<C-s>', '<cmd>w<cr>')
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 -- See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })

@@ -2,7 +2,7 @@ return {
   'f-person/git-blame.nvim',
   opts = {
     enabled = false,
-    gitblame_remote_domains = 'github',
+    date_format = '%a %b %d %Y',
   },
   keys = {
     { '<leader>gb', '<cmd>GitBlameToggle<cr>', desc = 'Toggle Git Blame' },
