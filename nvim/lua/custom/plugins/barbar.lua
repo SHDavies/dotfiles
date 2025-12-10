@@ -25,6 +25,7 @@ return {
     { '<A-0>', '<Cmd>BufferLast<CR>' },
     { '<A-c>', '<Cmd>BufferClose<CR>' },
     { '<A-r>', '<Cmd>BufferRestore<CR>' },
+    { '<A-o>', '<Cmd>BufferCloseAllButCurrent<CR>' },
     { '<C-p>', '<Cmd>BufferPick<CR>' },
     { '<C-P>', '<Cmd>BufferPickDelete<CR>' },
   },
@@ -32,6 +33,7 @@ return {
     sidebar_filetypes = {
       ['neo-tree'] = { event = 'BufWipeout' },
     },
+    auto_hide = 1,
   },
 }
 
