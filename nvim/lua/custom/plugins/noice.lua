@@ -15,6 +15,7 @@ return {
           any = {
             { find = 'Committed' },
             { find = 'Config Change' },
+            { find = "ruby_lsp quit" },
           },
         },
         opts = { skip = true },

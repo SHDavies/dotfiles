@@ -27,7 +27,7 @@ return {
     { '<A-r>', '<Cmd>BufferRestore<CR>' },
     { '<A-o>', '<Cmd>BufferCloseAllButCurrent<CR>' },
     { '<C-p>', '<Cmd>BufferPick<CR>' },
-    { '<C-P>', '<Cmd>BufferPickDelete<CR>' },
+    { '<C-x>', '<Cmd>BufferPickDelete<CR>' },
   },
   opts = {
     sidebar_filetypes = {
