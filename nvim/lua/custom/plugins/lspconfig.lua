@@ -210,7 +210,7 @@ return {
       --
       -- Uncomment language servers below as needed:
       -- ts_ls = {},      -- TypeScript/JavaScript (requires Node.js)
-      ruby_lsp = {},   -- Ruby
+      -- ruby_lsp = {},   -- Ruby
       -- pyright = {},    -- Python
       -- rust_analyzer = {}, -- Rust
       -- gopls = {},      -- Go
