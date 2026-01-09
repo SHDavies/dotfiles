@@ -1,4 +1,4 @@
--- Auto trim trailing whitespace and trailing newlines
+-- auto trim trailing whitespace and trailing newlines
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   pattern = { '*' },
   callback = function()

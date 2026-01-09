@@ -48,6 +48,10 @@ vim.keymap.set('v', '<S-Tab>', '<gv', { desc = 'Outdent line' })
 vim.keymap.set('n', '<Tab>', '>>', { desc = 'Indent line' })
 vim.keymap.set('n', '<S-Tab>', '<<', { desc = 'Outdent line' })
 
+-- Restore <C-i> jump forward (since <Tab> is remapped above)
+-- Requires a terminal with CSI u / Kitty keyboard protocol support (Ghostty, Kitty, WezTerm)
+vim.keymap.set('n', '<C-i>', '<C-i>', { desc = 'Jump forward' })
+
 -- Insert undo breakpoints after punctuation and whitespace
 -- This makes undo more granular instead of undoing entire insert sessions
 -- <C-g>u creates an undo breakpoint in insert mode
