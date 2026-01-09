@@ -31,3 +31,15 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'BufWinLeave', 'TabLeave'
     end
   end,
 })
+
+-- Prevent oil buffers from appearing in barbar tabline
+-- BufNew fires at buffer creation, before BufAdd and BufEnter
+vim.api.nvim_create_autocmd({ 'BufNew', 'BufAdd' }, {
+  callback = function(args)
+    local bufname = vim.api.nvim_buf_get_name(args.buf)
+    if bufname:match('^oil://') then
+      vim.bo[args.buf].buflisted = false
+    end
+  end,
+  desc = 'Prevent oil buffers from appearing in tabline',
+})
