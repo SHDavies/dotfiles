@@ -63,7 +63,29 @@ function M.replace_casing()
     vim.notify('No word under cursor', vim.log.levels.WARN)
     return
   end
-  vim.notify('replace_casing: ' .. source)
+
+  local ui = require('smart-replace.ui')
+  local case = require('smart-replace.case')
+
+  ui.prompt_replacement(source, function(replacement)
+    local source_parsed = case.split_words(source)
+    local replacement_parsed = case.split_words(replacement)
+
+    local source_variants = case.generate_variants(source_parsed.words, source_parsed.acronyms)
+    local replacement_variants = case.generate_variants(replacement_parsed.words, replacement_parsed.acronyms)
+
+    local patterns = {}
+    local replacements = {}
+    for i, sv in ipairs(source_variants) do
+      table.insert(patterns, sv.value)
+      table.insert(replacements, replacement_variants[i].value)
+    end
+
+    require('muren.api').open_ui({
+      patterns = patterns,
+      replacements = replacements,
+    })
+  end)
 end
 
 return M
