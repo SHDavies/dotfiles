@@ -90,4 +90,86 @@ function M.split_words(str)
   return { words = words, acronyms = acronyms }
 end
 
+function M.to_camel_case(words, acronyms)
+  acronyms = acronyms or {}
+  local result = {}
+  for i, word in ipairs(words) do
+    if i == 1 then
+      table.insert(result, word:lower())
+    else
+      if acronyms[i] then
+        table.insert(result, word:upper())
+      else
+        table.insert(result, word:sub(1, 1):upper() .. word:sub(2):lower())
+      end
+    end
+  end
+  return table.concat(result)
+end
+
+function M.to_pascal_case(words, acronyms)
+  acronyms = acronyms or {}
+  local result = {}
+  for i, word in ipairs(words) do
+    if acronyms[i] then
+      table.insert(result, word:upper())
+    else
+      table.insert(result, word:sub(1, 1):upper() .. word:sub(2):lower())
+    end
+  end
+  return table.concat(result)
+end
+
+function M.to_snake_case(words)
+  local result = {}
+  for _, word in ipairs(words) do
+    table.insert(result, word:lower())
+  end
+  return table.concat(result, '_')
+end
+
+function M.to_screaming_snake(words)
+  local result = {}
+  for _, word in ipairs(words) do
+    table.insert(result, word:upper())
+  end
+  return table.concat(result, '_')
+end
+
+function M.to_kebab_case(words)
+  local result = {}
+  for _, word in ipairs(words) do
+    table.insert(result, word:lower())
+  end
+  return table.concat(result, '-')
+end
+
+function M.to_title_case(words)
+  local result = {}
+  for _, word in ipairs(words) do
+    table.insert(result, word:sub(1, 1):upper() .. word:sub(2):lower())
+  end
+  return table.concat(result, ' ')
+end
+
+function M.to_lowercase(words)
+  local result = {}
+  for _, word in ipairs(words) do
+    table.insert(result, word:lower())
+  end
+  return table.concat(result, ' ')
+end
+
+function M.generate_variants(words, acronyms)
+  return {
+    { style = 'camelCase', value = M.to_camel_case(words, acronyms) },
+    { style = 'PascalCase', value = M.to_pascal_case(words, acronyms) },
+    { style = 'snake_case', value = M.to_snake_case(words) },
+    { style = 'SCREAMING_SNAKE', value = M.to_screaming_snake(words) },
+    { style = 'kebab-case', value = M.to_kebab_case(words) },
+    { style = 'Title Case', value = M.to_title_case(words) },
+    { style = 'lowercase', value = M.to_lowercase(words) },
+  }
+end
+
 return M
