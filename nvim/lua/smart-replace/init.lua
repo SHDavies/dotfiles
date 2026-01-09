@@ -57,7 +57,7 @@ function M.replace_word()
   end)
 end
 
-function M.replace_casing()
+function M.replace_casing_variants()
   local source = get_source_text()
   if source == '' then
     vim.notify('No word under cursor', vim.log.levels.WARN)

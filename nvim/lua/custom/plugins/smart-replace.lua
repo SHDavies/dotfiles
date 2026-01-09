@@ -23,10 +23,10 @@ return {
     {
       '<leader>rc',
       function()
-        require('smart-replace').replace_casing()
+        require('smart-replace').replace_casing_variants()
       end,
       mode = { 'n', 'v' },
-      desc = '[R]eplace [C]asing',
+      desc = '[R]eplace with [C]asing Variants',
     },
   },
 }
