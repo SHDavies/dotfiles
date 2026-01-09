@@ -14,6 +14,31 @@ local function get_source_text()
   end
 end
 
+local function escape_pattern(text)
+  return text:gsub('\\', '\\\\'):gsub('/', '\\/')
+end
+
+local function do_replace(source, replacement)
+  local escaped_source = escape_pattern(source)
+  local escaped_replacement = replacement:gsub('/', '\\/')
+
+  -- Count matches first
+  local count = 0
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  for _, line in ipairs(lines) do
+    local _, matches = line:gsub(vim.pesc(source), '')
+    count = count + matches
+  end
+
+  if count == 0 then
+    vim.notify('No matches found for "' .. source .. '"', vim.log.levels.WARN)
+    return
+  end
+
+  vim.cmd(':%s/\\V' .. escaped_source .. '/' .. escaped_replacement .. '/g')
+  vim.notify('Replaced ' .. count .. ' occurrence' .. (count == 1 and '' or 's'))
+end
+
 function M.setup(opts)
   opts = opts or {}
   M.opts = opts
@@ -25,7 +50,11 @@ function M.replace_word()
     vim.notify('No word under cursor', vim.log.levels.WARN)
     return
   end
-  vim.notify('replace_word: ' .. source)
+
+  local ui = require('smart-replace.ui')
+  ui.prompt_replacement(source, function(replacement)
+    do_replace(source, replacement)
+  end)
 end
 
 function M.replace_casing()
