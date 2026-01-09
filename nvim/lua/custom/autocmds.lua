@@ -1,3 +1,15 @@
+-- Auto trim trailing whitespace and trailing newlines
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  pattern = { '*' },
+  callback = function()
+    local view = vim.fn.winsaveview()
+    vim.cmd [[%s/\s\+$//e]]
+    vim.cmd [[%s/\n\+\%$//e]]
+    vim.fn.winrestview(view)
+  end,
+  desc = 'Trim trailing whitespace and newlines',
+})
+
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'qf',
   desc = 'Attach keymaps for quickfix list',
@@ -24,7 +36,9 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- Save on blur
 vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'BufWinLeave', 'TabLeave' }, {
+  nested = true,
   callback = function()
     if vim.bo.modified and vim.bo.modifiable and vim.bo.buftype == '' then
       vim.cmd 'silent! write'
