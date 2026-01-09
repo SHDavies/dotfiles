@@ -144,10 +144,15 @@ function M.to_kebab_case(words)
   return table.concat(result, '-')
 end
 
-function M.to_title_case(words)
+function M.to_title_case(words, acronyms)
+  acronyms = acronyms or {}
   local result = {}
-  for _, word in ipairs(words) do
-    table.insert(result, word:sub(1, 1):upper() .. word:sub(2):lower())
+  for i, word in ipairs(words) do
+    if acronyms[i] then
+      table.insert(result, word:upper())
+    else
+      table.insert(result, word:sub(1, 1):upper() .. word:sub(2):lower())
+    end
   end
   return table.concat(result, ' ')
 end
@@ -167,7 +172,7 @@ function M.generate_variants(words, acronyms)
     { style = 'snake_case', value = M.to_snake_case(words) },
     { style = 'SCREAMING_SNAKE', value = M.to_screaming_snake(words) },
     { style = 'kebab-case', value = M.to_kebab_case(words) },
-    { style = 'Title Case', value = M.to_title_case(words) },
+    { style = 'Title Case', value = M.to_title_case(words, acronyms) },
     { style = 'lowercase', value = M.to_lowercase(words) },
   }
 end
