@@ -68,8 +68,9 @@ function M.replace_casing_variants()
   local case = require('smart-replace.case')
 
   ui.prompt_replacement(source, function(replacement)
-    local source_parsed = case.split_words(source)
-    local replacement_parsed = case.split_words(replacement)
+    local source_style = case.detect_style(source)
+    local source_parsed = case.split_words(source, source_style)
+    local replacement_parsed = case.split_words(replacement, source_style)
 
     local source_variants = case.generate_variants(source_parsed.words, source_parsed.acronyms)
     local replacement_variants = case.generate_variants(replacement_parsed.words, replacement_parsed.acronyms)

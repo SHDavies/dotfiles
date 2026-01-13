@@ -28,8 +28,8 @@ function M.detect_style(str)
   end
 end
 
-function M.split_words(str)
-  local style = M.detect_style(str)
+function M.split_words(str, style)
+  style = style or M.detect_style(str)
   local words = {}
   local acronyms = {}
 
