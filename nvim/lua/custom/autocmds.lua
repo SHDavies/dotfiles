@@ -57,3 +57,14 @@ vim.api.nvim_create_autocmd({ 'BufNew', 'BufAdd' }, {
   end,
   desc = 'Prevent oil buffers from appearing in tabline',
 })
+
+-- Autorefresh buffers
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+  group = vim.api.nvim_create_augroup('CheckForExternalChanges', { clear = true }),
+  callback = function()
+    if vim.fn.mode() ~= 'c' then
+      vim.cmd('checktime')
+      require('gitsigns').refresh()
+    end
+  end
+})

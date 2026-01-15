@@ -90,6 +90,8 @@ vim.o.scrolloff = 8
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+vim.opt.autoread = true
+
 -- [[ Basic Keymaps ]]
 -- Custom keymaps are defined in lua/custom/keymaps.lua
 require 'custom.keymaps'
