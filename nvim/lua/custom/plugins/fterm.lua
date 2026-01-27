@@ -13,5 +13,31 @@ return {
         }
       end,
     },
+    {
+      '<A-s>',
+      function()
+        require('server-terminal').toggle 'default'
+      end,
+      mode = { 'n', 't' },
+      desc = 'Toggle server terminal (default)',
+    },
+    {
+      '<A-S>',
+      function()
+        require('server-terminal').toggle 'alternate'
+      end,
+      mode = { 'n', 't' },
+      desc = 'Toggle server terminal (alternate)',
+    },
   },
+  config = function()
+    vim.api.nvim_create_autocmd('VimLeavePre', {
+      callback = function()
+        local ok, server_terminal = pcall(require, 'server-terminal')
+        if ok then
+          server_terminal.cleanup()
+        end
+      end,
+    })
+  end,
 }
