@@ -87,3 +87,7 @@ function _G.CopyBufferName()
 end
 
 vim.keymap.set('n', '<leader>cp', CopyBufferName, { desc = 'Copy current path' })
+
+-- Session management
+vim.keymap.set('n', '<leader>sr', ':SessionRestore<CR>', { desc = 'Restore session' })
+vim.keymap.set('n', '<leader>ss', ':SessionSave<CR>', { desc = 'Save session' })
