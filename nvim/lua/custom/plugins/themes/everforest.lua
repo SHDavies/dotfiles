@@ -13,6 +13,7 @@ return {
       callback = function()
         vim.api.nvim_set_hl(0, 'LineNr', { fg = '#9da9a0' })
         vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#e69875', bold = true })
+        vim.api.nvim_set_hl(0, 'FloatTermBg', { bg = '#232a2e' })
       end,
     })
   end,

@@ -31,6 +31,10 @@ return {
     },
   },
   config = function()
+    require('FTerm').setup {
+      hl = 'FloatTermBg',
+    }
+
     vim.api.nvim_create_autocmd('VimLeavePre', {
       callback = function()
         local ok, server_terminal = pcall(require, 'server-terminal')
