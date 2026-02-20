@@ -19,6 +19,12 @@ return {
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
 
+    -- Split and join arguments
+    --
+    -- - gS - toggle between single-line and multi-line arguments
+    -- Works with (), [], {} — any comma-separated items in brackets
+    require('mini.splitjoin').setup()
+
     -- Smart and powerful comment plugin
     --
     -- - gcc - toggle comment on current line (in normal mode)
@@ -26,6 +32,8 @@ return {
     -- - gcip - toggle comment on current paragraph
     -- Also supports <leader>/ shortcut (see lua/custom/keymaps.lua)
     require('mini.comment').setup()
+
+    require('mini.move').setup()
 
     -- Simple and easy statusline.
     --  You could remove this setup call if you don't like it,
