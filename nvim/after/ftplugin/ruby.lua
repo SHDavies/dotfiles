@@ -171,5 +171,155 @@ local function fix_ruby_ends()
   end
 end
 
--- Keybinding
+-- Ruby Indent Fixer
+-- Re-indents the entire file based on block structure without applying other formatting
+
+local function fix_ruby_indent()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local indent_width = vim.bo.shiftwidth
+
+  -- Block-opening keywords (must be first token on line)
+  local block_openers = {
+    'class', 'module', 'def', 'if', 'unless', 'case',
+    'while', 'until', 'for', 'begin',
+  }
+
+  -- Mid-block keywords: dedent for this line, re-indent for next
+  local mid_block_keywords = { 'else', 'elsif', 'when', 'in', 'rescue', 'ensure' }
+
+  -- Count closing brackets at the very start of a line (before any other content)
+  local function count_leading_closes(code)
+    local count = 0
+    for i = 1, #code do
+      local c = code:sub(i, i)
+      if c == ')' or c == ']' or c == '}' then
+        count = count + 1
+      else
+        break
+      end
+    end
+    return count
+  end
+
+  -- Count net bracket delta (opens minus closes) for an entire line
+  local function count_bracket_delta(code)
+    local delta = 0
+    for i = 1, #code do
+      local c = code:sub(i, i)
+      if c == '(' or c == '[' or c == '{' then
+        delta = delta + 1
+      elseif c == ')' or c == ']' or c == '}' then
+        delta = delta - 1
+      end
+    end
+    return delta
+  end
+
+  local indent_level = 0
+  local in_heredoc = false
+  local heredoc_delimiter = nil
+  local new_lines = {}
+
+  -- Save cursor position
+  local cursor = vim.api.nvim_win_get_cursor(0)
+
+  for _, line in ipairs(lines) do
+    -- Heredoc content: preserve as-is
+    if in_heredoc then
+      table.insert(new_lines, line)
+      if line:match('^%s*' .. heredoc_delimiter .. '%s*$') then
+        in_heredoc = false
+        heredoc_delimiter = nil
+      end
+      goto continue
+    end
+
+    -- Blank lines stay blank
+    if line:match('^%s*$') then
+      table.insert(new_lines, '')
+      goto continue
+    end
+
+    -- Strip leading whitespace to get content
+    local content = line:match('^%s*(.*)')
+
+    -- Prepare code for keyword matching (strip strings and comments)
+    local code = content:gsub('"[^"]*"', '""'):gsub("'[^']*'", "''"):gsub('#.*$', '')
+
+    -- Classify the line
+    local is_end = code:match('^end%f[%W]') ~= nil
+
+    local is_mid = false
+    for _, kw in ipairs(mid_block_keywords) do
+      if code:match('^' .. kw .. '%f[%W]') then
+        is_mid = true
+        break
+      end
+    end
+
+    local leading_closes = count_leading_closes(code)
+
+    -- Step 1: Dedent for this line (keywords + leading closing brackets)
+    local keyword_dedent = 0
+    if is_end or is_mid then
+      keyword_dedent = 1
+    end
+    indent_level = math.max(0, indent_level - keyword_dedent - leading_closes)
+
+    -- Step 2: Write the re-indented line
+    table.insert(new_lines, string.rep(' ', indent_level * indent_width) .. content)
+
+    -- Check for heredoc start (so we preserve subsequent heredoc content)
+    local heredoc_match = code:match('<<[~-]?([%w_]+)')
+    if heredoc_match then
+      in_heredoc = true
+      heredoc_delimiter = heredoc_match
+    end
+
+    -- Step 3: Indent changes for subsequent lines
+
+    -- Keyword-based
+    if is_mid then
+      indent_level = indent_level + 1
+    elseif not is_end then
+      local opens = false
+      for _, kw in ipairs(block_openers) do
+        if code:match('^' .. kw .. '%f[%W]') then
+          opens = true
+          break
+        end
+      end
+
+      if not opens then
+        if code:match('%f[%w]do%s*|') or code:match('%f[%w]do%s*$') then
+          opens = true
+        end
+      end
+
+      if opens then
+        local has_inline_end = code:match('%f[%w]end%f[%W]') and not code:match('^end%f[%W]')
+        if not has_inline_end then
+          indent_level = indent_level + 1
+        end
+      end
+    end
+
+    -- Bracket-based: net delta minus the leading closers already handled above
+    local net_delta = count_bracket_delta(code)
+    local remaining_delta = net_delta + leading_closes
+    indent_level = math.max(0, indent_level + remaining_delta)
+
+    ::continue::
+  end
+
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, new_lines)
+
+  -- Restore cursor position (clamp row to new line count)
+  local max_row = #new_lines
+  cursor[1] = math.min(cursor[1], max_row)
+  vim.api.nvim_win_set_cursor(0, cursor)
+end
+
+-- Keybindings
 vim.keymap.set('n', '<leader>re', fix_ruby_ends, { buffer = true, desc = 'Fix Ruby ends' })
+vim.keymap.set('n', '<leader>ri', fix_ruby_indent, { buffer = true, desc = 'Fix Ruby indentation' })
