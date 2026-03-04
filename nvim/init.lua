@@ -97,6 +97,7 @@ vim.opt.autoread = true
 require 'custom.keymaps'
 
 require 'custom.autocmds'
+require 'custom.gemspec-version-commit'
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
