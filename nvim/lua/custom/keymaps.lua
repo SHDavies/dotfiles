@@ -79,6 +79,8 @@ vim.keymap.set('i', ')', ')<C-g>u')
 vim.keymap.set('i', ']', ']<C-g>u')
 vim.keymap.set('i', '}', '}<C-g>u')
 
+vim.keymap.set('i', '<C-j>', '<Esc>', { desc = 'Exit insert mode' })
+
 vim.keymap.set('i', '<C-z>', '<C-o>u')
 
 function _G.CopyBufferName()
