@@ -16,6 +16,7 @@ local parsers = {
   'vim',
   'vimdoc',
   'ruby',
+  'elixir',
 }
 
 return {

@@ -214,6 +214,7 @@ return {
       -- pyright = {},    -- Python
       -- rust_analyzer = {}, -- Rust
       -- gopls = {},      -- Go
+      elixirls = {},
 
       lua_ls = {
         -- cmd = { ... },
@@ -266,4 +267,3 @@ return {
     }
   end,
 }
-
