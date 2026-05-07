@@ -26,6 +26,7 @@ return {
     { '<A-c>', '<Cmd>BufferClose<CR>' },
     { '<A-r>', '<Cmd>BufferRestore<CR>' },
     { '<A-o>', '<Cmd>BufferCloseAllButCurrent<CR>' },
+    { '<A-a>', '<Cmd>BufferCloseAllButCurrent<CR><Cmd>BufferClose<CR>' },
     { '<C-p>', '<Cmd>BufferPick<CR>' },
     { '<C-x>', '<Cmd>BufferPickDelete<CR>' },
   },
