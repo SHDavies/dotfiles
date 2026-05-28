@@ -132,7 +132,26 @@ function M.commit_gemspec_version()
     end,
   })
 
-  require('neogit').action('commit', 'commit')()
+  -- Equivalent to `require('neogit').action('commit', 'commit')()`, but works
+  -- around a neogit bug where the action callback fires outside an async
+  -- context, causing `client.wrap` inside the commit action to error.
+  local a = require 'neogit.lib.async'
+  local git = require 'neogit.lib.git'
+  git.repo:dispatch_refresh {
+    source = 'action',
+    callback = a.void(function()
+      require('neogit.popups.commit.actions').commit {
+        close = function() end,
+        state = { env = {} },
+        get_arguments = function()
+          return {}
+        end,
+        get_internal_arguments = function()
+          return {}
+        end,
+      }
+    end),
+  }
 end
 
 vim.keymap.set('n', '<leader>gp', M.commit_gemspec_version, { desc = 'Commit gemspec version bump' })
