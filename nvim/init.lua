@@ -98,6 +98,7 @@ require 'custom.keymaps'
 
 require 'custom.autocmds'
 require 'custom.gemspec-version-commit'
+require 'custom.neogit-global-history'
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
