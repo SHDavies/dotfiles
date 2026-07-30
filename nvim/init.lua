@@ -24,7 +24,13 @@ vim.o.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.o.expandtab = true -- Use spaces instead of tabs
 vim.o.softtabstop = 2 -- Number of spaces that a <Tab> counts for while editing
 
-vim.o.wrap = false
+-- Soft wrapping, on for every filetype. Wide files are unreadable with lines
+-- running off-screen, and nothing here wants the horizontal scrolling instead.
+-- Purely a display setting -- the file's bytes are untouched.
+vim.o.wrap = true
+vim.o.linebreak = true -- Break between words rather than mid-word
+vim.opt.breakat = ' \t' -- Break only at whitespace, not at punctuation like ':'
+vim.o.breakindent = true -- Continuation lines keep the indent of the line they belong to
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'

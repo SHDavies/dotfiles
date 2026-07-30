@@ -3,6 +3,15 @@
 
 vim.keymap.set('n', '<C-s>', '<cmd>w<cr>')
 
+-- Move by display lines when wrapped, unless a count is given (so 5j etc. still work with relative numbers)
+vim.keymap.set({ 'n', 'v' }, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Down (respect wrap)' })
+vim.keymap.set({ 'n', 'v' }, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Up (respect wrap)' })
+
+-- Likewise for start/end of line. Normal mode only, so operator-pending is left
+-- alone and d$/c$/y$ still act on the whole logical line.
+vim.keymap.set('n', '0', 'g0', { desc = 'Start of display line' })
+vim.keymap.set('n', '$', "v:count == 0 ? 'g$' : '$'", { expr = true, desc = 'End of display line' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 -- See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
