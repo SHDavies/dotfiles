@@ -93,8 +93,11 @@ vim.keymap.set('i', '<C-j>', '<Esc>', { desc = 'Exit insert mode' })
 vim.keymap.set('i', '<C-z>', '<C-o>u')
 
 function _G.CopyBufferName()
-  local filepath = vim.fn.expand '%'
-  vim.fn.setreg('+', '"' .. filepath .. '"')
+  -- Derive the path from the buffer's full name rather than expand('%'), which
+  -- returns the name as it was opened -- absolute when a plugin or the command
+  -- line supplied an absolute path, and stale after the cwd changes.
+  local filepath = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':.')
+  vim.fn.setreg('+', filepath)
 end
 
 vim.keymap.set('n', '<leader>cp', CopyBufferName, { desc = 'Copy current path' })

@@ -7,6 +7,11 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- Enable neogit debug logging to ~/.cache/nvim/neogit.log
+-- Read by neogit's logger at load time; must be set before the plugin loads.
+vim.env.NEOGIT_LOG_FILE = '1'
+vim.env.NEOGIT_LOG_LEVEL = 'debug'
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -29,7 +34,7 @@ vim.o.softtabstop = 2 -- Number of spaces that a <Tab> counts for while editing
 -- Purely a display setting -- the file's bytes are untouched.
 vim.o.wrap = true
 vim.o.linebreak = true -- Break between words rather than mid-word
-vim.opt.breakat = ' \t' -- Break only at whitespace, not at punctuation like ':'
+-- vim.opt.breakat = ' \t' -- Break only at whitespace, not at punctuation like ':'
 vim.o.breakindent = true -- Continuation lines keep the indent of the line they belong to
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -46,11 +51,10 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
-vim.o.breakindent = true
-
--- Save undo history
-vim.o.undofile = true
+-- Save undo history. Managed manually via hashed filenames in
+-- custom/autocmds.lua — the native undofile encodes the full path into one
+-- filename, which exceeds the 255-byte limit for deeply-nested paths (E828).
+vim.o.undofile = false
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true

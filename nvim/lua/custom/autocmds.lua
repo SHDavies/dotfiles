@@ -58,6 +58,47 @@ vim.api.nvim_create_autocmd({ 'BufNew', 'BufAdd' }, {
   desc = 'Prevent oil buffers from appearing in tabline',
 })
 
+-- Persistent undo with hashed filenames.
+-- Neovim's native undofile encodes a buffer's full path into a single flat
+-- filename (/ -> %). Deeply-nested paths (common in the neuron repo) exceed the
+-- 255-byte filename limit on macOS, so writes fail with E828. Instead we store
+-- undo history under a sha256 of the path (64 chars) and load/save it manually.
+local undodir = vim.fn.stdpath('state') .. '/undo'
+vim.fn.mkdir(undodir, 'p')
+
+local function undofile_for(buf)
+  if vim.bo[buf].buftype ~= '' then
+    return nil
+  end
+  local name = vim.api.nvim_buf_get_name(buf)
+  if name == '' then
+    return nil
+  end
+  return undodir .. '/' .. vim.fn.sha256(name)
+end
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  group = vim.api.nvim_create_augroup('PersistentUndo', { clear = true }),
+  callback = function(args)
+    local file = undofile_for(args.buf)
+    if file and vim.fn.filereadable(file) == 1 then
+      vim.cmd('silent! rundo ' .. vim.fn.fnameescape(file))
+    end
+  end,
+  desc = 'Load persistent undo history from hashed file',
+})
+
+vim.api.nvim_create_autocmd('BufWritePost', {
+  group = 'PersistentUndo',
+  callback = function(args)
+    local file = undofile_for(args.buf)
+    if file then
+      vim.cmd('silent! wundo ' .. vim.fn.fnameescape(file))
+    end
+  end,
+  desc = 'Save persistent undo history to hashed file',
+})
+
 -- Autorefresh buffers
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
   group = vim.api.nvim_create_augroup('CheckForExternalChanges', { clear = true }),
