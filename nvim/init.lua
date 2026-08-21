@@ -7,10 +7,27 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- Enable neogit debug logging to ~/.cache/nvim/neogit.log
--- Read by neogit's logger at load time; must be set before the plugin loads.
-vim.env.NEOGIT_LOG_FILE = '1'
-vim.env.NEOGIT_LOG_LEVEL = 'debug'
+-- Capture every message, including Lua stack traces, to a per-session file.
+-- Neogit's own logger only records what it explicitly logs, so runtime errors
+-- never reach neogit.log. 'verbosefile' catches them; one file per process
+-- keeps concurrent sessions from interleaving into an unreadable mess.
+--
+-- Neogit's debug logging is deliberately not enabled here: its logger reopens
+-- and closes the log file for every single line, which costs tens of ms of
+-- blocking I/O per status refresh in large repositories. Enable it per-session
+-- instead: NEOGIT_LOG_FILE=1 NEOGIT_LOG_LEVEL=debug nvim
+local message_log_dir = vim.fn.stdpath 'state' .. '/messages'
+vim.fn.mkdir(message_log_dir, 'p')
+local message_log = string.format('%s/%s-%d.log', message_log_dir, os.date '%Y%m%d-%H%M%S', vim.fn.getpid())
+vim.o.verbosefile = message_log
+
+-- Writes to 'verbosefile' are buffered, so the tail may be missing until nvim
+-- exits. Re-assigning the option flushes it without losing earlier output.
+vim.api.nvim_create_user_command('MessageLog', function()
+  vim.o.verbosefile = ''
+  vim.o.verbosefile = message_log
+  vim.notify(message_log)
+end, { desc = 'Flush and report the message log path' })
 
 -- [[ Setting options ]]
 -- See `:help vim.o`

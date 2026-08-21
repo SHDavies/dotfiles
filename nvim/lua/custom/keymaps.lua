@@ -19,6 +19,23 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highl
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Quickfix list navigation. Telescope's <C-q> dumps a picker's results here, so
+-- the list doubles as a persistent, editable view of a search.
+vim.keymap.set('n', ']q', '<cmd>cnext<cr>zz', { desc = 'Next quickfix item' })
+vim.keymap.set('n', '[q', '<cmd>cprev<cr>zz', { desc = 'Previous quickfix item' })
+vim.keymap.set('n', ']Q', '<cmd>clast<cr>zz', { desc = 'Last quickfix item' })
+vim.keymap.set('n', '[Q', '<cmd>cfirst<cr>zz', { desc = 'First quickfix item' })
+
+vim.keymap.set('n', '<leader>sq', function()
+  -- getwininfo marks location list windows as quickfix too, so exclude them --
+  -- otherwise an open diagnostic loclist would make this close nothing.
+  local is_open = vim.iter(vim.fn.getwininfo()):any(function(win)
+    return win.quickfix == 1 and win.loclist == 0
+  end)
+
+  vim.cmd(is_open and 'cclose' or 'copen')
+end, { desc = '[S]earch results: toggle [Q]uickfix' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
