@@ -32,6 +32,10 @@ Leader key is `<Space>`. Tabs are 2 spaces. Lua formatting uses stylua (see `nvi
 
 ## Key Conventions
 
+- Prefer a plugin's built-in functionality over a custom implementation. Before adding bespoke keymaps, autocmds, or Lua wrappers to change how a plugin behaves, read that plugin's own docs and source (installed under `~/.local/share/nvim/lazy/<plugin>/`, plus `:help <plugin>`) for an existing option, command, or default mapping that already does it. Surface what the plugin offers and suggest using it before writing anything custom.
+  - Example: for a change to Neogit interaction, check Neogit's setup options, its built-in commands, and its existing popup/section mappings before defining a new keybinding or extension.
+- If no installed plugin covers it, look for an existing community plugin that does (search the web, awesome-neovim, GitHub) before writing a custom solution. Present the candidates — with what each does and how actively maintained it is — and let the user pick; don't install one unasked.
+- Write a custom implementation only when neither an installed plugin nor a community plugin fits, and say why when proposing it.
 - New Neovim plugins go in `nvim/lua/custom/plugins/` as individual `.lua` files returning a lazy.nvim spec
 - The zshrc sources `~/.zshrc.local` at the end for machine-specific config
 - Tmux prefix is `C-a` (not default `C-b`); pane navigation uses hjkl
